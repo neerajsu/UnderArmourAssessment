@@ -1,11 +1,11 @@
 package com.underarmour.assessment.repo;
 
-import java.util.stream.Stream;
+import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.underarmour.assessment.domain.SimpleMessage;
 
-public interface SimpleMessageRepository extends CrudRepository<SimpleMessage, Integer> {
-	Stream<SimpleMessage> findByUserName(String userName);
+public interface SimpleMessageRepository extends JpaRepository<SimpleMessage, Integer> {
+	List<SimpleMessage> findByUserName(String userName);
 }

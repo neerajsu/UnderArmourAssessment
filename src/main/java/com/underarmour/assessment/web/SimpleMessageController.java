@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,8 +59,8 @@ public class SimpleMessageController {
 
 	@RequestMapping(method = RequestMethod.GET, path = "/chats/{userName}")
 	public List<ChatsResponseDto> getChatMessages(@PathVariable String userName) {
-		Stream<SimpleMessage> messagesStream = simpleMessageRepository.findByUserName(userName);
-		return messagesStream.map(message -> toChatsReponseDto(message)).collect(Collectors.toList());
+		List<SimpleMessage> messages = simpleMessageRepository.findByUserName(userName);
+		return messages.stream().map(message -> toChatsReponseDto(message)).collect(Collectors.toList());
 	}
 
 	private ChatResponseDto ToChatReponseDto(SimpleMessage simpleMessage) {
@@ -81,7 +80,15 @@ public class SimpleMessageController {
 		private Integer id;
 
 		public IdReturnType(Integer id) {
-			id = this.id;
+			this.id = id;
+		}
+
+		public Integer getId() {
+			return id;
+		}
+
+		public void setId(Integer id) {
+			this.id = id;
 		}
 	}
 

@@ -1,18 +1,25 @@
 package com.underarmour.assessment.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-public class SimpleMessage {
+public class SimpleMessage implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	protected SimpleMessage() {
 	}
@@ -25,7 +32,8 @@ public class SimpleMessage {
 	}
 
 	@Id
-	@GeneratedValue
+	@Column
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
 	@Column
@@ -49,24 +57,48 @@ public class SimpleMessage {
 		return id;
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getUserName() {
 		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getMessage() {
 		return message;
 	}
 
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public Date getExpirationDate() {
 		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
 	}
 
 	public LocalDateTime getCreateDateTime() {
 		return createDateTime;
 	}
 
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
 	public LocalDateTime getUpdateDateTime() {
 		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 }
