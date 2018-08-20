@@ -3,9 +3,6 @@ package com.underarmour.assessment.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.data.redis.core.RedisHash;
-
-@RedisHash
 public class RedisMessage implements Serializable  {
 	/**
 	 * 

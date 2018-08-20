@@ -1,11 +1,12 @@
 package com.underarmour.assessment.repo;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import com.underarmour.assessment.model.RedisMessage;
 
-@Repository
-public interface SimpleMessageHotRepository extends CrudRepository<RedisMessage, String> {
 
+public interface SimpleMessageHotRepository {
+	void addMessage(final RedisMessage message);
+	List<RedisMessage> findAllByUserName(String userName);
+	void deleteMessage(final RedisMessage message);
 }

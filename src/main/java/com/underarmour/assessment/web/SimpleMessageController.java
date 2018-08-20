@@ -23,6 +23,7 @@ import com.underarmour.assessment.common.CommonConstants;
 import com.underarmour.assessment.domain.SimpleMessage;
 import com.underarmour.assessment.exception.APIException;
 import com.underarmour.assessment.exception.ErrorInfo;
+import com.underarmour.assessment.model.RedisMessage;
 import com.underarmour.assessment.service.SimpleMessageService;
 import com.underarmour.assessment.utils.DateUtils;
 
@@ -55,8 +56,10 @@ public class SimpleMessageController {
 
 	@RequestMapping(method = RequestMethod.GET, path = "/chats/{userName}")
 	public List<ChatsResponseDto> getChatMessagesForUser(@PathVariable String userName) {
-		List<SimpleMessage> messages = simpleMessageService.findMessageByUserName(userName);
-		return messages.stream().map(message -> toChatsReponseDto(message)).collect(Collectors.toList());
+		List<RedisMessage> messages = simpleMessageService.findMessageByUserName(userName);
+		List<ChatsResponseDto> chats = messages.stream().map(message -> toChatsReponseDto(message)).collect(Collectors.toList());
+		simpleMessageService.expireMessage(messages);
+		return chats;
 	}
 
 	private ChatResponseDto ToChatReponseDto(SimpleMessage simpleMessage) {
@@ -64,8 +67,8 @@ public class SimpleMessageController {
 				DateUtils.toDateFormat(simpleMessage.getExpirationDate()));
 	}
 
-	private ChatsResponseDto toChatsReponseDto(SimpleMessage simpleMessage) {
-		return new ChatsResponseDto(simpleMessage.getId(), simpleMessage.getMessage());
+	private ChatsResponseDto toChatsReponseDto(RedisMessage redisMessage) {
+		return new ChatsResponseDto(redisMessage.getId(), redisMessage.getText());
 	}
 
 	class IdReturnType {

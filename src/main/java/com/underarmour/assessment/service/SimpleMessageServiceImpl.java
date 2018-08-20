@@ -7,18 +7,25 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.underarmour.assessment.domain.SimpleMessage;
+import com.underarmour.assessment.model.RedisMessage;
 import com.underarmour.assessment.repo.SimpleMessageColdRepository;
+import com.underarmour.assessment.repo.SimpleMessageHotRepository;
 
 @Service
+@Transactional
 public class SimpleMessageServiceImpl implements SimpleMessageService {
 
 	private SimpleMessageColdRepository coldRepository;
+	
+	private SimpleMessageHotRepository hotRepository;
 
 	@Autowired
-	public SimpleMessageServiceImpl(SimpleMessageColdRepository coldRepository) {
+	public SimpleMessageServiceImpl(SimpleMessageColdRepository coldRepository, SimpleMessageHotRepository hotRepository) {
 		this.coldRepository = coldRepository;
+		this.hotRepository = hotRepository;
 	}
 
 	@Override
@@ -26,7 +33,10 @@ public class SimpleMessageServiceImpl implements SimpleMessageService {
 		if (timeout == null) {
 			timeout = 60;
 		}
-		return coldRepository.save(new SimpleMessage(userName, message, getExpirationDateFromTimeout(timeout)));
+		
+		SimpleMessage simpleMessage = coldRepository.save(new SimpleMessage(userName, message, getExpirationDateFromTimeout(timeout)));
+		hotRepository.addMessage(new RedisMessage(simpleMessage.getId(), userName, message, getExpirationDateFromTimeout(timeout)));
+		return simpleMessage;
 	}
 
 	@Override
@@ -35,14 +45,21 @@ public class SimpleMessageServiceImpl implements SimpleMessageService {
 	}
 
 	@Override
-	public List<SimpleMessage> findMessageByUserName(String userName) {
-		return coldRepository.findByUserName(userName);
+	public List<RedisMessage> findMessageByUserName(String userName) {
+		return hotRepository.findAllByUserName(userName);
 	}
 	
 	private Date getExpirationDateFromTimeout(int timeout) {
 		Instant instant = Instant.now();
 		instant.plusSeconds(timeout);
 		return Date.from(instant);
+	}
+
+	@Override
+	public void expireMessage(List<RedisMessage> redisMessages) {
+		for (RedisMessage redisMessage : redisMessages) {
+			hotRepository.deleteMessage(redisMessage);
+		}
 	}
 
 }
