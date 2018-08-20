@@ -1,6 +1,5 @@
 package com.underarmour.assessment.web;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ import com.underarmour.assessment.common.CommonConstants;
 import com.underarmour.assessment.domain.SimpleMessage;
 import com.underarmour.assessment.exception.APIException;
 import com.underarmour.assessment.exception.ErrorInfo;
-import com.underarmour.assessment.repo.SimpleMessageRepository;
 import com.underarmour.assessment.service.SimpleMessageService;
 import com.underarmour.assessment.utils.DateUtils;
 
@@ -36,21 +34,19 @@ public class SimpleMessageController {
 	@Autowired
 	SimpleMessageService simpleMessageService;
 
-	@Autowired
-	SimpleMessageRepository simpleMessageRepository;
-
 	@RequestMapping(method = RequestMethod.POST, path = "/chat")
 	@ResponseStatus(HttpStatus.CREATED)
 	public IdReturnType createChatMessage(@RequestBody @Validated ChatRequestDto messageDto) {
 		SimpleMessage simpleMessage = simpleMessageService.createSimpleMessage(messageDto.getUsername(),
-				messageDto.getText(), getExpirationDateFromTimeout(messageDto.getTimeout()));
+				messageDto.getText(), messageDto.getTimeout());
 		return new IdReturnType(simpleMessage.getId());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/chat/{id}")
 	public ChatResponseDto getChatMessage(@PathVariable Integer id) {
-		Optional<SimpleMessage> simpleMessageOptional = simpleMessageRepository.findById(id);
+		Optional<SimpleMessage> simpleMessageOptional = simpleMessageService.findMessageById(id);
 		if (simpleMessageOptional.isPresent()) {
+			System.out.println("Inside getChatMessage");
 			return ToChatReponseDto(simpleMessageOptional.get());
 		} else {
 			throw new APIException(HttpStatus.NOT_FOUND, "Message for this id: " + id + " does not exist");
@@ -58,8 +54,8 @@ public class SimpleMessageController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, path = "/chats/{userName}")
-	public List<ChatsResponseDto> getChatMessages(@PathVariable String userName) {
-		List<SimpleMessage> messages = simpleMessageRepository.findByUserName(userName);
+	public List<ChatsResponseDto> getChatMessagesForUser(@PathVariable String userName) {
+		List<SimpleMessage> messages = simpleMessageService.findMessageByUserName(userName);
 		return messages.stream().map(message -> toChatsReponseDto(message)).collect(Collectors.toList());
 	}
 
@@ -70,10 +66,6 @@ public class SimpleMessageController {
 
 	private ChatsResponseDto toChatsReponseDto(SimpleMessage simpleMessage) {
 		return new ChatsResponseDto(simpleMessage.getId(), simpleMessage.getMessage());
-	}
-
-	private Date getExpirationDateFromTimeout(int timeout) {
-		return new Date();
 	}
 
 	class IdReturnType {
