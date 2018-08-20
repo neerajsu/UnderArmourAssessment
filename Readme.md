@@ -54,11 +54,6 @@ Regarding implementation of service methods
 **Get /chats/:username** : gets data from redis and expires the messages as per requirement. There is no requirement to touch the cold storage  
 
 
-  - Type some Markdown on the left
-  - See HTML in the right
-  - Magic
-
-
 ##### Limitations of implementation  
 
 
