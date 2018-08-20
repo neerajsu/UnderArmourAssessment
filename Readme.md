@@ -47,9 +47,12 @@ For hot storage, I chose Redis since it is the fastest open source, **in-memory*
 
 Regarding implementation of service methods
 
-**Post /chat** : Stores in redis and parallelly stores in cold storage database
-**Get /chat/:id** : Gets data only from cold storage since most databases have good performance on querying single row on an id. Be it NoSQL or relational.
-**Get /chats/:username** : gets data from redis and expires the messages as per requirement. There is no requirement to touch the cold storage
+**Post /chat** : Stores in redis and parallelly stores in cold storage database  
+
+**Get /chat/:id** : Gets data only from cold storage since most databases have good performance on querying single row on an id. Be it NoSQL or relational.  
+
+**Get /chats/:username** : gets data from redis and expires the messages as per requirement. There is no requirement to touch the cold storage  
+
 
   - Type some Markdown on the left
   - See HTML in the right
