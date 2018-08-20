@@ -26,7 +26,7 @@ public class SimpleMessage implements Serializable{
 
 	public SimpleMessage(String userName, String message, Date expirationDate) {
 		super();
-		this.userName = userName;
+		this.username = userName;
 		this.message = message;
 		this.expirationDate = expirationDate;
 	}
@@ -37,7 +37,7 @@ public class SimpleMessage implements Serializable{
 	private Integer id;
 
 	@Column
-	private String userName;
+	private String username;
 	
 	@Column
 	private String message;
@@ -61,12 +61,12 @@ public class SimpleMessage implements Serializable{
 		this.id = id;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getMessage() {

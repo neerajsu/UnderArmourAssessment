@@ -1,5 +1,6 @@
 package com.underarmour.assessment.config;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,6 +14,7 @@ import com.underarmour.assessment.queue.MessagePublisherImpl;
 import com.underarmour.assessment.queue.MessageSubscriber;
 
 @Configuration
+@ComponentScan("com.underarmour.assessment")
 public class RedisConfig {
 
     @Bean

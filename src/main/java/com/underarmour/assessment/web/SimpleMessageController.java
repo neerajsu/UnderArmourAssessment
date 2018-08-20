@@ -47,7 +47,6 @@ public class SimpleMessageController {
 	public ChatResponseDto getChatMessage(@PathVariable Integer id) {
 		Optional<SimpleMessage> simpleMessageOptional = simpleMessageService.findMessageById(id);
 		if (simpleMessageOptional.isPresent()) {
-			System.out.println("Inside getChatMessage");
 			return ToChatReponseDto(simpleMessageOptional.get());
 		} else {
 			throw new APIException(HttpStatus.NOT_FOUND, "Message for this id: " + id + " does not exist");
@@ -63,7 +62,7 @@ public class SimpleMessageController {
 	}
 
 	private ChatResponseDto ToChatReponseDto(SimpleMessage simpleMessage) {
-		return new ChatResponseDto(simpleMessage.getUserName(), simpleMessage.getMessage(),
+		return new ChatResponseDto(simpleMessage.getUsername(), simpleMessage.getMessage(),
 				DateUtils.toDateFormat(simpleMessage.getExpirationDate()));
 	}
 

@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Repository;
 
 import com.underarmour.assessment.model.RedisMessage;
@@ -22,6 +23,7 @@ public class SimpleMessageHotRepositoryImpl implements SimpleMessageHotRepositor
 	
 	@PostConstruct
     private void init(){
+		redisTemplate.setDefaultSerializer(new StringRedisSerializer());
         this.valueOperations = redisTemplate.opsForValue();
     }
 
@@ -53,8 +55,8 @@ public class SimpleMessageHotRepositoryImpl implements SimpleMessageHotRepositor
 		List<RedisMessage> redisMessages = new ArrayList<RedisMessage>();
 		keys.stream().forEach(key -> {
 			String text = valueOperations.get(key);
-			String username = userName.split(":")[0];
-			Integer id = Integer.parseInt(username.split(":")[1]);
+			String username = key.split(":")[0];
+			Integer id = Integer.parseInt(key.split(":")[1]);
 			RedisMessage redisMessage = new RedisMessage(id, username, text, new Date());
 			redisMessages.add(redisMessage);
 		});

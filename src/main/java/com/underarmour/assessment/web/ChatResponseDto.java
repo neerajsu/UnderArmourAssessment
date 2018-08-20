@@ -1,23 +1,23 @@
 package com.underarmour.assessment.web;
 
 public class ChatResponseDto {
-	String userName;
+	String username;
 	String text;
-	String expirationDate;
+	String expiration_date;
 
-	public ChatResponseDto(String userName, String text, String expirationDate) {
+	public ChatResponseDto(String username, String text, String expiration_date) {
 		super();
-		this.userName = userName;
+		this.username = username;
 		this.text = text;
-		this.expirationDate = expirationDate;
+		this.expiration_date = expiration_date;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getText() {
@@ -28,11 +28,13 @@ public class ChatResponseDto {
 		this.text = text;
 	}
 
-	public String getExpirationDate() {
-		return expirationDate;
+	public String getExpiration_date() {
+		return expiration_date;
 	}
 
-	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
+	public void setExpiration_date(String expiration_date) {
+		this.expiration_date = expiration_date;
 	}
+
+	
 }

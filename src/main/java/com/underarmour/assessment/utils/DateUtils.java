@@ -1,9 +1,11 @@
 package com.underarmour.assessment.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtils {
 	public  static String toDateFormat(Date dateToFormat) {
-		return "2015-08-12 06:22:52";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(dateToFormat);
 	}
 }

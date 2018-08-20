@@ -41,6 +41,7 @@ public class SimpleMessageServiceImpl implements SimpleMessageService {
 
 	@Override
 	public Optional<SimpleMessage> findMessageById(Integer id) {
+		//No need for using redis hot storage here since lookup on id for single row should be performant on cold storage too
 		return coldRepository.findById(id);
 	}
 
@@ -50,9 +51,7 @@ public class SimpleMessageServiceImpl implements SimpleMessageService {
 	}
 	
 	private Date getExpirationDateFromTimeout(int timeout) {
-		Instant instant = Instant.now();
-		instant.plusSeconds(timeout);
-		return Date.from(instant);
+		return Date.from(Instant.now().plusSeconds(timeout));
 	}
 
 	@Override

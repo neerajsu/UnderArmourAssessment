@@ -13,7 +13,6 @@ public class MessageSubscriber implements MessageListener {
 
     public void onMessage(final Message message, final byte[] pattern) {
         messageList.add(message.toString());
-        System.out.println("Message received: " + new String(message.getBody()));
     }
 
 }
