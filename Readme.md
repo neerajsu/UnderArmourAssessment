@@ -69,7 +69,7 @@ I haven't configured the redis memory settings. If millions of messages are sent
 ##### What would I do if you had more time/How you would scale it in the future?
 
     Write test cases;)
-    Containerize with something like Docker so I don't have to manually install Redis cache. 
+    Containerize redis with something like Docker so I don't have to manually install Redis cache. Maybe implement sharding or scaling out (master+slaves), depending on the volume/throughput requirement.
     Package the app into a Docker image
     Upload the image to a registry
     Create a container cluster like Kubernetes Engine cluster
